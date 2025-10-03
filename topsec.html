@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bestie Special 💖</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Background video */
+    #bgVideo {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+      display: none; /* hidden until fingerprint */
+    }
+
+    /* Dark overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
+
+    /* Fingerprint unlock */
+    #fingerprint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%,-50%);
+      width: 120px;
+      height: 120px;
+      border: 3px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      animation: pulse 1.5s infinite alternate;
+      z-index: 20;
+    }
+    #fingerprint img {
+      width: 70px;
+      height: 70px;
+    }
+    @keyframes pulse {
+      from { box-shadow: 0 0 15px rgba(255,255,255,0.5); }
+      to { box-shadow: 0 0 30px rgba(255,255,255,0.9); }
+    }
+
+    .content {
+      flex: 1;
+      padding: 20px;
+      text-align: center;
+      overflow-y: auto;
+      position: relative;
+      z-index: 1;
+    }
+    .hidden {
+      display: none;
+    }
+    .tabs {
+      display: flex;
+      justify-content: space-around;
+      background: #222;
+      padding: 10px 0;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 10;
+    }
+    .tab {
+      flex: 1;
+      text-align: center;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .tab.active {
+      color: #ff4081;
+      font-weight: bold;
+    }
+
+    /* Top Secret Animation */
+    .secret-text {
+      font-size: 22px;
+      margin-top: 50px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 2s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Songs */
+    audio {
+      width: 100%;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    /* Emoji Rain */
+    .emoji {
+      position: fixed;
+      top: -50px;
+      font-size: 28px;
+      pointer-events: none;
+      animation: fall linear forwards;
+      z-index: 0;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background video -->
+  <video id="bgVideo" loop muted>
+    <source src="Bgv.mp4" type="video/mp4">
+  </video>
+
+  <!-- Dark overlay -->
+  <div class="overlay"></div>
+
+  <!-- Background song -->
+  <audio id="bgSong" loop>
+    <source src="#.mp3" type="audio/mpeg">
+  </audio>
+
+  <!-- Fingerprint Unlock -->
+  <div id="fingerprint">
+    <img src="finger.png" alt="fingerprint">
+  </div>
+
+  <div id="topSecret" class="content hidden">
+    <h3>Top Secret</h3>
+    <p class="secret-text">Hey Aru ji 💕, I just want you to know how amazing you are. From all the laughs we’ve shared to every little moment that only we understand, you make my days brighter and my life so much more fun. You’re not just a friend—you’re family, my partner-in-crime, my spaghetti partner 🍝, and my ultimate support. Thank you for always being there, for making every silly moment unforgettable, and for being the incredible person you are. I’m so lucky to have you in my life, and I hope we keep creating endless memories together. You truly are one of a kind, and I love that about you 💖✨</p>
+  </div>
+
+  <div id="mySongs" class="content hidden">
+    <h2>My Songs</h2>
+    <p>Here are my uploaded songs:</p>
+    <audio controls>
+      <source src="sahiba.mp3" type="audio/mpeg">
+    </audio>
+    <audio controls>
+      <source src="ehsaas.mp3" type="audio/mpeg">
+    </audio>
+    <audio controls>
+      <source src="song3.mp3" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <!-- Bottom Tabs -->
+  <div class="tabs hidden" id="tabsBar">
+    <div class="tab active" onclick="showTab('topSecret', this)">Top Secret</div>
+    <div class="tab" onclick="showTab('mySongs', this)">My Songs</div>
+  </div>
+
+  <script>
+    const video = document.getElementById("bgVideo");
+    const song = document.getElementById("bgSong");
+    const fingerprint = document.getElementById("fingerprint");
+    const tabsBar = document.getElementById("tabsBar");
+
+    fingerprint.addEventListener("click", () => {
+      // Play video & music
+      video.style.display = "block";
+      video.play();
+      song.play();
+
+      // Hide fingerprint & show tabs + content
+      fingerprint.style.display = "none";
+      tabsBar.classList.remove("hidden");
+      document.getElementById("topSecret").classList.remove("hidden");
+
+      // Start emoji rain
+      startEmojiRain();
+    });
+
+    function showTab(tabId, element) {
+      document.querySelectorAll('.content').forEach(c => c.classList.add('hidden'));
+      document.getElementById(tabId).classList.remove('hidden');
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      element.classList.add('active');
+
+      if (tabId === "topSecret") {
+        startEmojiRain();
+      }
+    }
+
+    function startEmojiRain() {
+      const emojis = ["💖","🍝","🌸","🔥","🎶","💫","😜","✨","🥳","🤩","🎉"];
+      let count = 0;
+      let interval = setInterval(() => {
+        if (count > 20) {
+          clearInterval(interval);
+          return;
+        }
+        count++;
+        let emoji = document.createElement("div");
+        emoji.classList.add("emoji");
+        emoji.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = Math.random() * 90 + "vw";
+        emoji.style.animationDuration = (2 + Math.random() * 3) + "s";
+        document.body.appendChild(emoji);
+        setTimeout(() => emoji.remove(), 5000);
+      }, 300);
+    }
+  </script>
+
+</body>
+</html>
