@@ -55,7 +55,7 @@ html, body { margin:0; padding:0; height:100%; overflow:hidden; font-family:'Pop
 <div class="center-text" id="storyText"></div>
 
 <div id="photos">
-  <img src="arya1.jpg" class="floating-photo">
+  <img src="arya1.jpg" class="floating-photo special-photo">
   <img src="arya2.jpg" class="floating-photo">
   <img src="arya3.jpg" class="floating-photo">
   <img src="arya4.jpg" class="floating-photo">
@@ -183,6 +183,11 @@ scanner.addEventListener('click',()=>{
     setTimeout(()=>{surprise.style.opacity='0';},5000);
 
   },2000);
+});
+  // Special photo click surprise
+const specialPhoto = document.querySelector('.special-photo');
+specialPhoto.addEventListener('click', () => {
+  window.open("topsec.html", "_blank"); 
 });
 </script>
 </body>
